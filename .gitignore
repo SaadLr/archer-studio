@@ -53,3 +53,5 @@ next-env.d.ts
 /examples
 /mini-services
 /.zscripts
+/skills
+/Caddyfile
