@@ -1,0 +1,291 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-grotesk), var(--font-noto), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-anton), var(--font-noto), sans-serif;
+  --font-cn: var(--font-noto), var(--font-grotesk), sans-serif;
+  --font-mono: var(--font-grotesk), ui-monospace, monospace;
+
+  --color-ink: var(--ink);
+  --color-bone: var(--bone);
+  --color-fog: var(--fog);
+  --color-flame: var(--flame);
+  --color-gold: var(--gold);
+  --color-coal: var(--coal);
+  --color-line: var(--line);
+
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--flame);
+  --color-primary: var(--bone);
+  --color-primary-foreground: var(--bg);
+  --color-secondary: var(--coal);
+  --color-secondary-foreground: var(--bone);
+  --color-muted: var(--coal);
+  --color-muted-foreground: var(--fog);
+  --color-accent: var(--flame);
+  --color-accent-foreground: var(--bg);
+  --color-destructive: var(--flame);
+  --color-popover: var(--coal);
+  --color-popover-foreground: var(--bone);
+  --color-card: var(--coal);
+  --color-card-foreground: var(--bone);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.25rem;
+  --bg: #0a0a0b;
+  --coal: #131315;
+  --bone: #edeae3;
+  --fog: #a8a49a;
+  --flame: #e8452c;
+  --gold: #f2b33d;
+  --line: rgba(237, 234, 227, 0.18);
+  --ink: #0a0a0b;
+
+  /* shadcn compat */
+  --background: var(--bg);
+  --foreground: var(--bone);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    background: var(--bg);
+    scroll-behavior: auto;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-grotesk), var(--font-noto), ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--flame);
+    color: #0a0a0b;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0b;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3a3833;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--flame);
+  }
+}
+
+/* hide native cursor on precise pointers — custom reticle takes over */
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+}
+
+/* ---------- Lenis smooth scroll ---------- */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ---------- Outlined display type — thicker stroke + faint fill keeps the
+   blueprint look while staying legible on dark backgrounds ---------- */
+.text-stroke {
+  -webkit-text-stroke: 2px var(--bone);
+  color: rgba(237, 234, 227, 0.14);
+}
+.text-stroke-thin {
+  -webkit-text-stroke: 1.25px var(--bone);
+  color: rgba(237, 234, 227, 0.14);
+}
+.text-stroke-flame {
+  -webkit-text-stroke: 2px var(--flame);
+  color: rgba(232, 69, 44, 0.16);
+}
+@media (max-width: 768px) {
+  .text-stroke,
+  .text-stroke-flame {
+    -webkit-text-stroke-width: 1.25px;
+  }
+}
+
+/* ---------- Film grain ---------- */
+.grain {
+  position: fixed;
+  inset: -100%;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.9s steps(4) infinite;
+}
+@keyframes grain-shift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-2%, 3%);
+  }
+  50% {
+    transform: translate(3%, -2%);
+  }
+  75% {
+    transform: translate(-3%, -3%);
+  }
+  100% {
+    transform: translate(2%, 2%);
+  }
+}
+
+/* ---------- Marquee ---------- */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes marquee-x-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+.animate-marquee-slow {
+  animation: marquee-x 46s linear infinite;
+}
+.animate-marquee-reverse {
+  animation: marquee-x-reverse 38s linear infinite;
+}
+
+/* ---------- Slow rotations ---------- */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slower {
+  animation: spin-slow 46s linear infinite;
+}
+.animate-spin-slowest {
+  animation: spin-slow 110s linear infinite reverse;
+}
+@keyframes tick-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.animate-tick {
+  animation: tick-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  55% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+.animate-scroll-cue {
+  animation: scroll-cue 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+/* ---------- Corner registration marks ---------- */
+.mark {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.mark::before,
+.mark::after {
+  content: "";
+  position: absolute;
+  background: var(--fog);
+}
+.mark::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+.mark::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  transform: translateY(-50%);
+}
+
+/* ---------- Link underline sweep ---------- */
+.link-sweep {
+  position: relative;
+}
+.link-sweep::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.link-sweep:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain,
+  .animate-marquee,
+  .animate-marquee-slow,
+  .animate-marquee-reverse,
+  .animate-spin-slower,
+  .animate-spin-slowest,
+  .animate-tick,
+  .animate-scroll-cue {
+    animation: none !important;
+  }
+}
